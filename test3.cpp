@@ -148,6 +148,7 @@ template<typename T>
 void close(IOps<T>** op){
   fclose((*op)->file); //close file
   delete (*op);
+  (*op)=nullptr;
 }
 //getsize
 template<typename T>
@@ -170,8 +171,8 @@ void end(IOps<T>** op){
 //relative from current pos
 template<typename T>
 void setPosIOp(IOps<T>** op,int p){
-    fseek((*op)->file, p, SEEK_CUR);//move to pos from cur relative prev pos=cur
-    (*op)->location=p;
+  fseek((*op)->file, p, SEEK_CUR);//move to pos from cur relative prev pos=cur
+  (*op)->location=p;
 }
 //move to start
 template<typename T>
@@ -183,11 +184,11 @@ void unwind(IOps<T>** op){
 template<typename T>
 void readline(IOps<T>** op){
   char tempB[1024];
-    while(fscanf((*op)->file, "%[^\n]\n", tempB) == 1){
+  while(fscanf((*op)->file, "%[^\n]\n", tempB) == 1){
       
-      outLog(tempB,"\n");
+    outLog(tempB,"\n");
       
-    }
+  }
 }
 
 //---------------------------------------------------------
@@ -255,15 +256,27 @@ T pop_back(DArray<T>** arr) {
 template <typename T>
 void printList(DArray<T>** arr) {
   size_t count=0;
-  while(count!=(*arr)->size){
-    outLog((*arr)->data[count++],"\n");
+  if(*arr!=nullptr){
+    while(count!=(*arr)->size){
+      outLog((*arr)->data[count++],"\n");
+    }
   }
 }
+// //delete array
+// template <typename T>
+// void deleteList(DArray<T>** arr) {
+//   delete[] (*arr)->data;
+//   delete *arr;
+//   //delete *arr;
+// }
 //delete array
 template <typename T>
 void deleteList(DArray<T>** arr) {
   delete[] (*arr)->data;
-  delete (*arr);
+  (*arr)->data=nullptr;
+  delete *arr;
+  *arr=nullptr;
+  //return nullptr;//delete *arr;
 }
 //---------------------------------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -319,11 +332,14 @@ int pop(Stack<T>** st){
 //peek
 template <typename T>
 int peek(Stack<T>** st){
-  if((*st)->top == -1){
-    outLog("Stack is Empty\n");
-    return -1;
+  if((*st)!=nullptr){
+    if((*st)->top == -1){
+      outLog("Stack is Empty\n");
+      return -1;
+    }
+    return (*st)->data[(*st)->top];
   }
-  return (*st)->data[(*st)->top];
+  return 0;
 }
 //chech if isempty
 template <typename T>
@@ -334,7 +350,9 @@ bool isEmpty(Stack<T>** st){
 template <typename T>
 void deleteList(Stack<T>** st){
   delete[] (*st)->data;
+  (*st)->data=nullptr;
   delete *st;
+  (*st)=nullptr;
 }
 //---------------------------------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -393,7 +411,7 @@ void push_back(String<char>** str, const char* data) {
   size_t s=strlen(data);
   size_t oldsize=(*str)->size;
   size_t newsize=(*str)->size+s;
-  outLog((int)oldsize,"\n",(int)newsize,"\n");
+  //outLog((int)oldsize,"\n",(int)newsize,"\n");
   if (oldsize < newsize) {
     // Resize the array if full
     (*str)->cap = newsize;
@@ -443,24 +461,27 @@ T pop_back(String<T>** str) {
 //print string
 template <typename T>
 void printList(String<T>** str) {
-  outLog((*str)->data,"\n");
+  if((*str)!=nullptr)
+    outLog((*str)->data,"\n");
 }
 //delete string
 template <typename T>
 void deleteList(String<T>** str) {
   delete[] (*str)->data;
+  (*str)->data=nullptr;
   delete (*str);
+  (*str)=nullptr;
 }
 
 //readlines
 template<typename T>
 void readline(IOps<T>** op, String<char>** dst){
   char tempB[1024];
-    while(fscanf((*op)->file, "%[^\n]\n", tempB) == 1){
+  while(fscanf((*op)->file, "%[^\n]\n", tempB) == 1){
       
-      //outLog(tempB,"\n");
-      push_back(&(*dst),tempB);
-    }
+    //outLog(tempB,"\n");
+    push_back(&(*dst),tempB);
+  }
 }
 //---------------------------------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -664,26 +685,26 @@ struct BTree {
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
 //---------------------------------------------------------
 int main() {
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   List<int>* head = nullptr;
   addItemBegin(&head, 1);
   addItemBegin(&head, 2);
@@ -694,26 +715,26 @@ int main() {
   deleteList(&head);
   outLog("Linked List after deletion: \n");
   printList(head);
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   DList<int>* head1 = nullptr;
   addItemBegin(&head1, 1);
   addItemBegin(&head1, 2);
@@ -723,26 +744,27 @@ int main() {
   printList(head1);
   deleteList(&head1);
   outLog("DLinked List after deletion: \n");
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  printList(head1);
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   DArray<int>* arr=nullptr;
   createArr(&arr);
   push_back(&arr,1);
@@ -762,26 +784,27 @@ int main() {
   printList(&arr);
   outLog("DArray Arr after deletion: \n");
   deleteList(&arr);
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  printList(&arr);
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   Stack<int>* s=nullptr;
   createStack(&s,5);
   push(&s,10);
@@ -791,26 +814,26 @@ int main() {
   pop(&s);
   outLog("Top element after pop is ",peek(&s),"\n");
   deleteList(&s);
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   String<char> *string=nullptr;
   createStr(&string);
   push_back(&string,'"');
@@ -819,41 +842,64 @@ int main() {
   outLog("String: \n");
   printList(&string);
   deleteList(&string);
-//---------------------------------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//--ABSOLUTLYNOWARRANTLY-----------------------------------
-//---------------------------------------------------------
-//---------------------------------------------------------
+  printList(&string);
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  //---------------------------------------------------------
   String<char> *string1=nullptr;
   IOps<int>* test;
   //outLog((int)sizeOfFile(&test));
   open(&test,"test1.cpp","rb");
-  //outLog((int)sizeOfFile(&test),"\n");
+  //
   start(&test);
   
   createStr(&string1);
   outLog("String1: \n");
-  //printList(&string);
+  
   
   readline(&test,&string1);
-  deleteList(&string1);
-  close(&test);
+  outLog((int)sizeOfFile(&test),"\n");
   printList(&string1);
+  deleteList(&string1);
+  //string1=nullptr;
+  close(&test);
+  //---------------------------------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //--ABSOLUTLYNOWARRANTLY-----------------------------------
+  //---------------------------------------------------------
+  
   return 0;
 }
 //---------------------------------------------------------
