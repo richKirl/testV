@@ -253,7 +253,7 @@ T pop_back(DArray<T> **arr) {
 }
 // print array
 template <typename T>
-void printList(DArray<T> **arr) {
+void printer(DArray<T> **arr) {
   size_t count = 0;
   if (*arr != nullptr) {
     while (count != (*arr)->size) {
@@ -263,7 +263,7 @@ void printList(DArray<T> **arr) {
 }
 // delete array
 template <typename T>
-void deleteList(DArray<T> **arr) {
+void cleaner(DArray<T> **arr) {
   delete[] (*arr)->data;
   (*arr)->data = nullptr;
   delete *arr;
@@ -294,7 +294,7 @@ template <typename T>
 struct Stack {
   T *data;
   size_t cap;
-  size_t top = -1;
+  size_t top = 0;
 };
 // create stack
 template <typename T>
@@ -338,7 +338,7 @@ template <typename T>
 bool isEmpty(Stack<T> **st) { return (*st)->top == -1; }
 // delete list
 template <typename T>
-void deleteList(Stack<T> **st) {
+void cleaner(Stack<T> **st) {
   delete[] (*st)->data;
   (*st)->data = nullptr;
   delete *st;
@@ -397,11 +397,11 @@ void push_back(String<T> **str, T data) {
   ;
 }
 //?
-void push_back(String<char> **str, const char *data) {
+template <typename T>
+void push_back(String<char> **str, T *data) {
   size_t s = strlen(data);
   size_t oldsize = (*str)->size;
   size_t newsize = (*str)->size + s;
-  // outLog((int)oldsize,"\n",(int)newsize,"\n");
   if (oldsize < newsize) {
     // Resize the array if full
     (*str)->cap = newsize;
@@ -416,32 +416,10 @@ void push_back(String<char> **str, const char *data) {
   }
   // Add new element
   memmove((*str)->data + oldsize, &data[0], strlen(data)); // this is custom
-  ;
 }
 //?
-void push_back(String<char> **str, char *data) {
-  size_t s = strlen(data);
-  size_t oldsize = (*str)->size;
-  size_t newsize = (*str)->size + s;
-  // outLog((int)oldsize,"\n",(int)newsize,"\n");
-  if (oldsize < newsize) {
-    // Resize the array if full
-    (*str)->cap = newsize;
-
-    char *newData = new char[newsize];
-    for (int i = 0; i < (*str)->size; ++i) {
-      newData[i] = (*str)->data[i];
-    }
-    delete[] (*str)->data;
-    (*str)->data = newData;
-    (*str)->size = newsize;
-  }
-  // Add new element
-  memmove((*str)->data + oldsize, &data[0], strlen(data)); // this is custom
-  ;
-}
-//?
-template <typename T> T pop_back(String<T> **str) {
+template <typename T> 
+T pop_back(String<T> **str) {
   if ((*str)->size > 0) {
     (*str)->size--;
   }
@@ -449,13 +427,13 @@ template <typename T> T pop_back(String<T> **str) {
 }
 // print string
 template <typename T>
-void printList(String<T> **str) {
+void printer(String<T> **str) {
   if ((*str) != nullptr)
   outLog((*str)->data, "\n");
 }
 // delete string
 template <typename T>
-void deleteList(String<T> **str) {
+void cleaner(String<T> **str) {
   delete[] (*str)->data;
   (*str)->data = nullptr;
   delete (*str);
@@ -468,7 +446,6 @@ void readline(IOps<T> **op, String<char> **dst) {
   char tempB[1024];
   while (fscanf((*op)->file, "%[^\n]\n", tempB) == 1) {
 
-    // outLog(tempB,"\n");
     push_back(&(*dst), tempB);
   }
 }
@@ -499,7 +476,7 @@ struct List {
 };
 // function add item to the single linked list
 template <typename T>
-void addItemBegin(List<T> **item, T data) {
+void push_back(List<T> **item, T data) {
   List<T> *tempList = new List<T>();
   tempList->data = data;
   tempList->next = NULL;
@@ -515,7 +492,7 @@ void addItemBegin(List<T> **item, T data) {
 }
 // Function to insert a node at the beginning of the list
 template <typename T>
-void addItemEnd(List<T> **item, T data) {
+void push_front(List<T> **item, T data) {
   List<T> *newNode = new List<T>();
   newNode->data = data;
   newNode->next = *item;
@@ -523,7 +500,7 @@ void addItemEnd(List<T> **item, T data) {
 }
 // function print single linked list
 template <typename T>
-void printList(List<T> *item) {
+void printer(List<T> *item) {
   List<T> *curr = item;
   while (curr != NULL) {
     outLog(curr->data, "\n");
@@ -532,7 +509,7 @@ void printList(List<T> *item) {
 }
 // Function to delete the single linked list
 template <typename T>
-void deleteList(List<T> **head) {
+void cleaner(List<T> **head) {
   List<T> *current = *head;
   List<T> *next = nullptr;
   while (current != nullptr) {
@@ -570,7 +547,7 @@ struct DList {
 };
 // function add item to the single linked list
 template <typename T>
-void addItemBegin(DList<T> **item, T data) {
+void push_back(DList<T> **item, T data) {
   DList<T> *tempList = new DList<T>();
   tempList->data = data;
   tempList->next = NULL;
@@ -588,7 +565,7 @@ void addItemBegin(DList<T> **item, T data) {
 }
 // Function to insert a node at the beginning of the list
 template <typename T>
-void addItemEnd(DList<T> **item, T data) {
+void push_front(DList<T> **item, T data) {
   DList<T> *newNode = new DList<T>();
   newNode->data = data;
   newNode->next = *item;
@@ -596,7 +573,7 @@ void addItemEnd(DList<T> **item, T data) {
 }
 // function print single linked list
 template <typename T>
-void printList(DList<T> *item) {
+void printer(DList<T> *item) {
   DList<T> *curr = item;
   while (curr != NULL) {
     outLog(curr->data, "\n");
@@ -605,7 +582,7 @@ void printList(DList<T> *item) {
 }
 // delete double list
 template <typename T>
-void deleteList(DList<T> **head) {
+void cleaner(DList<T> **head) {
   DList<T> *current = *head;
   DList<T> *next = nullptr;
   while (current != nullptr) {
@@ -634,6 +611,12 @@ void deleteList(DList<T> **head) {
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
 //---------------------------------------------------------
+//queue
+template <typename T>
+struct Queue{
+  T data;
+  
+};
 // btree
 template <typename T>
 struct BTree {
@@ -642,18 +625,22 @@ struct BTree {
   BTree *right;
 };
 //?
-// template<typename T>
-// NodeBT<T> addNode(NodeBT<T>* node,T d)
-// {
-  //     if(node==nullptr){
-    //         NodeBT<T>* tempNode = new NodeBT<T>();
-    //         tempNode->data=d;
-    //         tempNode->left=NULL;
-    //         tempNode->right=NULL;
-    //         return tempNode;
-    //     }
-
-  // }
+template<typename T>
+void createBT(){}
+template<typename T>
+void insertB(BTree<T> **bt,T d){
+  BTree<T> *temp=new BTree<T>();
+  temp->left=nullptr;
+  temp->right=nullptr;
+  temp->data=d;
+  if(*bt==nullptr){
+    *bt=temp;
+    return;
+  }
+  
+}
+template<typename T>
+void deleteB(){}
 //---------------------------------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
 //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -695,15 +682,15 @@ int main() {
   //---------------------------------------------------------
   //---------------------------------------------------------
   List<int> *head = nullptr;
-  addItemBegin(&head, 1);
-  addItemBegin(&head, 2);
-  addItemEnd(&head, 0);
-  addItemBegin(&head, 3);
+  push_back(&head, 1);
+  push_back(&head, 2);
+  push_front(&head, 0);
+  push_back(&head, 3);
   outLog("Linked List: \n");
-  printList(head);
-  deleteList(&head);
+  printer(head);
+  cleaner(&head);
   outLog("Linked List after deletion: \n");
-  printList(head);
+  printer(head);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -725,15 +712,15 @@ int main() {
   //---------------------------------------------------------
   //---------------------------------------------------------
   DList<int> *head1 = nullptr;
-  addItemBegin(&head1, 1);
-  addItemBegin(&head1, 2);
-  addItemBegin(&head1, 3);
-  addItemBegin(&head1, 4);
+  push_back(&head1, 1);
+  push_back(&head1, 2);
+  push_back(&head1, 3);
+  push_back(&head1, 4);
   outLog("DLinked List: \n");
-  printList(head1);
-  deleteList(&head1);
+  printer(head1);
+  cleaner(&head1);
   outLog("DLinked List after deletion: \n");
-  printList(head1);
+  printer(head1);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -770,10 +757,10 @@ int main() {
   pop_back(&arr);
   pop_back(&arr);
   outLog("DArray Arr: \n");
-  printList(&arr);
+  printer(&arr);
   outLog("DArray Arr after deletion: \n");
-  deleteList(&arr);
-  printList(&arr);
+  cleaner(&arr);
+  printer(&arr);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -802,7 +789,7 @@ int main() {
   outLog("Top element is ", peek(&s), "\n");
   pop(&s);
   outLog("Top element after pop is ", peek(&s), "\n");
-  deleteList(&s);
+  cleaner(&s);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -829,9 +816,9 @@ int main() {
   push_back(&string, '"');
   push_back(&string, "ddasdasdsadasdasdasdasdasda5435345345435435");
   outLog("String: \n");
-  printList(&string);
-  deleteList(&string);
-  printList(&string);
+  printer(&string);
+  cleaner(&string);
+  printer(&string);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -861,8 +848,8 @@ int main() {
 
   readline(&test, &string1);
   outLog((int)sizeOfFile(&test), "\n");
-  printList(&string1);
-  deleteList(&string1);
+  printer(&string1);
+  cleaner(&string1);
   close(&test);
   //---------------------------------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
@@ -883,7 +870,6 @@ int main() {
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //--ABSOLUTLYNOWARRANTLY-----------------------------------
   //---------------------------------------------------------
-
   return 0;
 }
 //---------------------------------------------------------
